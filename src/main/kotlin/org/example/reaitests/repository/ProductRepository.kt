@@ -50,7 +50,7 @@ class ProductRepository(private val jdbcClient: JdbcClient) {
             from products p
             left join product_variants v on v.product_id = p.id
             where p.deleted_at is null
-            order by p.id desc, v.id
+            order by p.id, v.id
             """.trimIndent()
         )
             .query { rs, _ ->
