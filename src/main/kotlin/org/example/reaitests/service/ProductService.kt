@@ -1,5 +1,6 @@
 package org.example.reaitests.service
 
+import org.example.reaitests.client.FammeClient
 import org.example.reaitests.model.Product
 import org.example.reaitests.repository.ProductRepository
 import org.springframework.dao.DataAccessException
@@ -11,6 +12,7 @@ import org.springframework.transaction.support.TransactionTemplate
 class ProductService(
     private val productRepository: ProductRepository,
     private val transactionTemplate: TransactionTemplate,
+    private val fammeClient: FammeClient,
 ) {
 
     fun findAll(): List<Product> = productRepository.findAllActive()
@@ -24,7 +26,9 @@ class ProductService(
         return productId
     }
 
-    fun importProducts(products: List<Product>): Int =
+    fun importFromFamme(): Int = importProducts(fammeClient.fetchProducts().take(50))
+
+    private fun importProducts(products: List<Product>): Int =
         products.count { product ->
             try {
                 transactionTemplate.execute {
