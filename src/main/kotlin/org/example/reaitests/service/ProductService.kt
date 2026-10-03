@@ -1,0 +1,40 @@
+package org.example.reaitests.service
+
+import org.example.reaitests.model.Product
+import org.example.reaitests.repository.ProductRepository
+import org.springframework.dao.DataAccessException
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import org.springframework.transaction.support.TransactionTemplate
+
+@Service
+class ProductService(
+    private val productRepository: ProductRepository,
+    private val transactionTemplate: TransactionTemplate,
+) {
+
+    fun findAll(): List<Product> = productRepository.findAllActive()
+
+    @Transactional
+    fun create(product: Product): Long {
+        val productId = checkNotNull(productRepository.insert(product)) {
+            "Product with external id ${product.externalId} already exists"
+        }
+        productRepository.insertVariants(productId, product.variants)
+        return productId
+    }
+
+    fun importProducts(products: List<Product>): Int =
+        products.count { product ->
+            try {
+                transactionTemplate.execute {
+                    productRepository.insert(product)?.also { productId ->
+                        productRepository.insertVariants(productId, product.variants)
+                    }
+                } != null
+            } catch (e: DataAccessException) {
+                println("Skipped product ${product.externalId}: ${e.message}")
+                false
+            }
+        }
+}
