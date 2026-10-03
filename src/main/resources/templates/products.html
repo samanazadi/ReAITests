@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<table th:fragment="table">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Vendor</th>
+        <th>Type</th>
+        <th>Variants</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.title}"></td>
+        <td th:text="${product.vendor}"></td>
+        <td th:text="${product.productType}"></td>
+        <td th:text="${product.variants.size()}"></td>
+    </tr>
+    <tr th:if="${products.isEmpty()}">
+        <td colspan="4">No products found.</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
