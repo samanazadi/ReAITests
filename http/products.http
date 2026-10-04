@@ -1,0 +1,57 @@
+GET http://localhost:8080/
+
+###
+
+GET http://localhost:8080/products
+
+###
+
+GET http://localhost:8080/products/1/variants
+
+###
+
+POST http://localhost:8080/products
+Content-Type: application/x-www-form-urlencoded
+
+title=Test Hoodie
+&vendor=Famme
+&productType=Hoodie
+&variants[0].title=Black / S
+&variants[0].price=499.00
+&variants[0].imageSrc=
+&variants[0].available=on
+&_variants[0].available=on
+&variants[1].title=Black / M
+&variants[1].price=549.00
+&variants[1].imageSrc=https://cdn.shopify.com/s/files/1/0076/6033/9297/files/flared-jeans-rinse-blue-1.jpg?v=1776671683
+&_variants[1].available=on
+
+###
+
+# Expect 422: blank product title, blank variant title, negative price and an invalid image URL
+POST http://localhost:8080/products
+Content-Type: application/x-www-form-urlencoded
+
+title=
+&vendor=Famme
+&variants[0].title=
+&variants[0].price=-5
+&variants[0].imageSrc=not-a-url
+&_variants[0].available=on
+
+###
+
+POST http://localhost:8080/products
+Content-Type: application/x-www-form-urlencoded
+
+title=Product without variants
+
+###
+
+POST http://localhost:8080/products
+Content-Type: application/x-www-form-urlencoded
+
+title=Bad price
+&variants[0].title=Default
+&variants[0].price=abc
+&_variants[0].available=on
