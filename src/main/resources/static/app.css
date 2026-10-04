@@ -32,7 +32,23 @@ main {
 
 .search-form {
     width: 100%;
-    max-width: 30rem;
+    max-width: 50rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--wa-space-m);
+}
+
+.search-form wa-input {
+    flex: 2 1 15rem;
+}
+
+.search-form wa-select {
+    flex: 1 1 10rem;
+}
+
+.search-form wa-switch {
+    margin-block-end: var(--wa-space-xs);
 }
 
 .edit-form {

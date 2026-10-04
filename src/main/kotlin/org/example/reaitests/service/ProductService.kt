@@ -2,6 +2,7 @@ package org.example.reaitests.service
 
 import org.example.reaitests.client.FammeClient
 import org.example.reaitests.model.Product
+import org.example.reaitests.model.ProductFilter
 import org.example.reaitests.model.ProductVariant
 import org.example.reaitests.repository.ProductRepository
 import org.springframework.dao.DataAccessException
@@ -18,8 +19,10 @@ class ProductService(
 
     fun findAll(): List<Product> = productRepository.findAllActive()
 
-    fun search(query: String): List<Product> =
-        if (query.isBlank()) findAll() else productRepository.searchActiveByTitle(query.trim())
+    fun search(filter: ProductFilter): List<Product> =
+        productRepository.searchActive(filter.copy(title = filter.title.trim()))
+
+    fun findProductTypes(): List<String> = productRepository.findActiveProductTypes()
 
     fun findVariants(productId: Long): List<ProductVariant> = productRepository.findVariantsByProductId(productId)
 

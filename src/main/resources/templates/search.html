@@ -10,6 +10,12 @@
                   clearable autofocus>
             <wa-icon slot="start" name="magnifying-glass"></wa-icon>
         </wa-input>
+        <wa-select name="type" label="Type" placeholder="All types" with-clear>
+            <wa-option th:value="${noType}" th:selected="${type == noType}">No type</wa-option>
+            <wa-option th:each="productType : ${types}" th:value="${productType}" th:text="${productType}"
+                       th:selected="${type == productType}"></wa-option>
+        </wa-select>
+        <wa-switch name="inStock" th:checked="${inStock}">In stock only</wa-switch>
     </form>
     <section id="search-results">
         <table th:replace="~{products :: productsTable}"></table>

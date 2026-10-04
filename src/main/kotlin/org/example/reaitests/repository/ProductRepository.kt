@@ -1,6 +1,7 @@
 package org.example.reaitests.repository
 
 import org.example.reaitests.model.Product
+import org.example.reaitests.model.ProductFilter
 import org.example.reaitests.model.ProductVariant
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository
@@ -64,8 +65,38 @@ class ProductRepository(private val jdbcClient: JdbcClient) {
 
     fun findAllActive(): List<Product> = findActive()
 
-    fun searchActiveByTitle(title: String): List<Product> =
-        findActive("and p.title ilike :titlePattern", mapOf("titlePattern" to "%${escapeLike(title)}%"))
+    fun searchActive(filter: ProductFilter): List<Product> {
+        val conditions = mutableListOf<String>()
+        val params = mutableMapOf<String, Any>()
+        if (filter.title.isNotBlank()) {
+            conditions += "and p.title ilike :titlePattern"
+            params["titlePattern"] = "%${escapeLike(filter.title)}%"
+        }
+        when (filter.type) {
+            "" -> {}
+            ProductFilter.NO_TYPE -> conditions += "and p.product_type is null"
+            else -> {
+                conditions += "and p.product_type = :type"
+                params["type"] = filter.type
+            }
+        }
+        if (filter.inStock) {
+            conditions += "and exists (select 1 from product_variants av where av.product_id = p.id and av.available)"
+        }
+        return findActive(conditions.joinToString(" "), params)
+    }
+
+    fun findActiveProductTypes(): List<String> =
+        jdbcClient.sql(
+            """
+            select distinct product_type
+            from products
+            where deleted_at is null and product_type is not null
+            order by product_type
+            """.trimIndent()
+        )
+            .query { rs, _ -> rs.getString("product_type") }
+            .list()
 
     fun findActiveById(id: Long): Product? = findActive("and p.id = :id", mapOf("id" to id)).firstOrNull()
 
