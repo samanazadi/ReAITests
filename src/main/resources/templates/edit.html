@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: pageHead('Edit product')}"></head>
+<body>
+<header th:replace="~{layout :: pageHeader('', 'Edit product')}"></header>
+<main>
+    <wa-button appearance="plain" href="/">
+        <wa-icon slot="start" name="arrow-left"></wa-icon>
+        Back to products
+    </wa-button>
+    <section id="edit-product">
+        <div th:fragment="editForm" class="edit-form">
+            <wa-card th:replace="~{products :: productForm('Product details', 'put', @{/products/{id}(id=${productId})}, '#edit-product', 'Save changes')}"></wa-card>
+        </div>
+    </section>
+</main>
+</body>
+</html>

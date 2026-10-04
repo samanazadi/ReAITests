@@ -42,29 +42,48 @@ class ProductRepository(private val jdbcClient: JdbcClient) {
         }
     }
 
-    fun findAllActive(): List<Product> = findActive(null)
+    fun update(id: Long, product: Product): Boolean =
+        jdbcClient.sql(
+            """
+            update products
+            set title = :title, vendor = :vendor, product_type = :productType
+            where id = :id and deleted_at is null
+            """.trimIndent()
+        )
+            .param("id", id)
+            .param("title", product.title)
+            .param("vendor", product.vendor)
+            .param("productType", product.productType)
+            .update() == 1
 
-    fun searchActiveByTitle(title: String): List<Product> = findActive("%${escapeLike(title)}%")
+    fun deleteVariants(productId: Long) {
+        jdbcClient.sql("delete from product_variants where product_id = :productId")
+            .param("productId", productId)
+            .update()
+    }
+
+    fun findAllActive(): List<Product> = findActive()
+
+    fun searchActiveByTitle(title: String): List<Product> =
+        findActive("and p.title ilike :titlePattern", mapOf("titlePattern" to "%${escapeLike(title)}%"))
+
+    fun findActiveById(id: Long): Product? = findActive("and p.id = :id", mapOf("id" to id)).firstOrNull()
 
     private fun escapeLike(value: String): String =
         value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
-    private fun findActive(titlePattern: String?): List<Product> {
-        val titleCondition = if (titlePattern == null) "" else "and p.title ilike :titlePattern"
-        var statement = jdbcClient.sql(
+    private fun findActive(condition: String = "", params: Map<String, Any> = emptyMap()): List<Product> {
+        return jdbcClient.sql(
             """
             select p.id, p.external_id, p.title, p.vendor, p.product_type,
                    v.id as variant_id, v.title as variant_title, v.price, v.featured_image_src, v.available
             from products p
             left join product_variants v on v.product_id = p.id
-            where p.deleted_at is null $titleCondition
+            where p.deleted_at is null $condition
             order by p.id, v.id
             """.trimIndent()
         )
-        if (titlePattern != null) {
-            statement = statement.param("titlePattern", titlePattern)
-        }
-        return statement
+            .params(params)
             .query { rs, _ ->
                 val product = Product(
                     id = rs.getLong("id"),

@@ -31,6 +31,20 @@ class ProductForm {
 
     companion object {
         fun empty() = ProductForm().apply { variants = mutableListOf(VariantForm()) }
+
+        fun from(product: Product) = ProductForm().apply {
+            title = product.title
+            vendor = product.vendor.orEmpty()
+            productType = product.productType.orEmpty()
+            variants = product.variants.map { variant ->
+                VariantForm().apply {
+                    title = variant.title
+                    price = variant.price
+                    imageSrc = variant.featuredImageSrc.orEmpty()
+                    available = variant.available
+                }
+            }.toMutableList()
+        }
     }
 }
 

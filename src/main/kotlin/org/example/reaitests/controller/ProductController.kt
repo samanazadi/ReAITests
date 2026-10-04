@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
@@ -42,6 +43,40 @@ class ProductController(private val productService: ProductService) {
         }
         model.addAttribute("products", productService.findAll())
         return "products :: productsSection"
+    }
+
+    @GetMapping("/products/{id}/edit")
+    fun edit(@PathVariable id: Long, model: Model): String {
+        model.addAttribute("productId", id)
+        model.addAttribute("productForm", ProductForm.from(productService.findById(id)))
+        return "edit"
+    }
+
+    @PutMapping("/products/{id}")
+    fun update(
+        @PathVariable id: Long,
+        @Valid @ModelAttribute productForm: ProductForm,
+        bindingResult: BindingResult,
+        model: Model,
+        response: HttpServletResponse,
+    ): String {
+        if (bindingResult.hasErrors()) {
+            response.status = HttpStatus.UNPROCESSABLE_CONTENT.value()
+            showToast(response, "Please fix the errors below", "danger")
+        } else {
+            productService.update(id, productForm.toProduct())
+            model.addAttribute("productForm", ProductForm.from(productService.findById(id)))
+            showToast(response, "Product saved", "success")
+        }
+        model.addAttribute("productId", id)
+        return "edit :: editForm"
+    }
+
+    private fun showToast(response: HttpServletResponse, message: String, variant: String) {
+        response.setHeader(
+            "HX-Trigger",
+            """{"showToast": {"message": "$message", "variant": "$variant", "target": "body"}}"""
+        )
     }
 
     @DeleteMapping("/products/{id}")

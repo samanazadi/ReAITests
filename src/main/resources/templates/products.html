@@ -3,7 +3,7 @@
 <body>
 <div th:fragment="productsSection" class="products-section">
     <table th:replace="~{products :: productsTable}"></table>
-    <wa-card th:replace="~{products :: productForm}"></wa-card>
+    <wa-card th:replace="~{products :: productForm('Add product', 'post', '/products', '#products', 'Save product')}"></wa-card>
 </div>
 
 <table th:fragment="productsTable" class="products-table">
@@ -54,6 +54,9 @@
                 </th:block>
             </td>
             <td class="actions">
+                <wa-button size="small" appearance="plain" th:href="@{/products/{id}/edit(id=${product.id})}">
+                    <wa-icon name="pen" label="Edit product"></wa-icon>
+                </wa-button>
                 <wa-button class="delete-product" size="small" appearance="plain" variant="danger"
                            th:data-product-id="${product.id}" th:data-product-title="${product.title}">
                     <wa-icon name="trash" label="Delete product"></wa-icon>
@@ -99,9 +102,12 @@
     </tbody>
 </table>
 
-<wa-card th:fragment="productForm" class="product-form-card">
-    <h2 slot="header">Add product</h2>
-    <form id="product-form" th:object="${productForm}" hx-post="/products" hx-target="#products">
+<wa-card th:fragment="productForm(heading, method, action, target, submitLabel)" class="product-form-card">
+    <h2 slot="header" th:text="${heading}"></h2>
+    <form id="product-form" th:object="${productForm}"
+          th:hx-post="${method == 'post'} ? ${action}"
+          th:hx-put="${method == 'put'} ? ${action}"
+          th:hx-target="${target}">
         <div class="product-fields">
             <wa-input label="Title" name="title" th:value="*{title}" required
                       th:hint="${#fields.hasErrors('title')} ? ${#fields.errors('title')[0]}"
@@ -126,7 +132,7 @@
                 <wa-icon slot="start" name="plus"></wa-icon>
                 Add variant
             </wa-button>
-            <wa-button type="submit" variant="brand">Save product</wa-button>
+            <wa-button type="submit" variant="brand" th:text="${submitLabel}"></wa-button>
         </div>
     </form>
 </wa-card>

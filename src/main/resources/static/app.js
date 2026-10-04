@@ -38,6 +38,15 @@ document.addEventListener("click", (event) => {
     }
 });
 
+document.addEventListener("showToast", (event) => {
+    const icons = {success: "circle-check", danger: "circle-exclamation"};
+    document.querySelector("#toast").create(event.detail.message, {
+        variant: event.detail.variant,
+        icon: icons[event.detail.variant],
+        duration: 4000,
+    });
+});
+
 function renumberVariantRows(form) {
     form.querySelectorAll(".variant-rows .variant-row").forEach((row, index) => {
         row.querySelectorAll("[name]").forEach((field) => {

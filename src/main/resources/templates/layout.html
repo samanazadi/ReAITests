@@ -27,6 +27,7 @@
         <wa-button href="/search" th:appearance="${active == 'search'} ? 'filled' : 'plain'">Search</wa-button>
     </nav>
     <h1 th:text="${heading}"></h1>
+    <wa-toast id="toast" placement="top-end"></wa-toast>
 </header>
 
 <wa-dialog th:fragment="deleteDialog" id="delete-dialog" label="Delete product">

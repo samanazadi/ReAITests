@@ -26,8 +26,15 @@ main {
     overflow-x: auto;
 }
 
-.search-form {
+.search-form,
+#edit-product {
     width: 100%;
+}
+
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wa-space-m);
 }
 
 .products-table,

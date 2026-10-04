@@ -32,6 +32,17 @@ class ProductService(
         return productId
     }
 
+    fun findById(id: Long): Product = productRepository.findActiveById(id) ?: throw ProductNotFoundException(id)
+
+    @Transactional
+    fun update(id: Long, product: Product) {
+        if (!productRepository.update(id, product)) {
+            throw ProductNotFoundException(id)
+        }
+        productRepository.deleteVariants(id)
+        productRepository.insertVariants(id, product.variants)
+    }
+
     fun delete(id: Long) {
         if (!productRepository.softDelete(id)) {
             throw ProductNotFoundException(id)
