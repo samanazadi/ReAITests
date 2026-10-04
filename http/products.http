@@ -1,3 +1,6 @@
+@productId = 614
+@nonExistingProductId = 999
+
 GET http://localhost:8080/
 
 ###
@@ -6,7 +9,7 @@ GET http://localhost:8080/products
 
 ###
 
-GET http://localhost:8080/products/1/variants
+GET http://localhost:8080/products/{{productId}}/variants
 
 ###
 
@@ -54,4 +57,79 @@ Content-Type: application/x-www-form-urlencoded
 title=Bad price
 &variants[0].title=Default
 &variants[0].price=abc
+&_variants[0].available=on
+
+###
+
+GET http://localhost:8080/search
+
+###
+
+GET http://localhost:8080/search?q=jeans&type=Jeans&inStock=true
+
+###
+
+GET http://localhost:8080/search/results?q=jeans
+
+###
+
+GET http://localhost:8080/search/results?type=Jeans&inStock=on
+
+###
+
+GET http://localhost:8080/search/results?type=_none
+
+###
+
+GET http://localhost:8080/products/{{productId}}/edit
+
+###
+
+PUT http://localhost:8080/products/{{productId}}
+Content-Type: application/x-www-form-urlencoded
+
+title=Updated Leggings
+&vendor=Famme
+&productType=Leggings
+&variants[0].title=Black / S
+&variants[0].price=399.00
+&variants[0].imageSrc=
+&variants[0].available=on
+&_variants[0].available=on
+&variants[1].title=Black / M
+&variants[1].price=429.00
+&variants[1].imageSrc=
+&_variants[1].available=on
+
+###
+
+# blank title, price -1
+PUT http://localhost:8080/products/{{productId}}
+Content-Type: application/x-www-form-urlencoded
+
+title=
+&variants[0].title=Black / S
+&variants[0].price=-1
+&_variants[0].available=on
+
+###
+
+DELETE http://localhost:8080/products/{{productId}}
+
+###
+
+DELETE http://localhost:8080/products/{{productId}}
+
+###
+
+GET http://localhost:8080/products/{{nonExistingProductId}}/edit
+
+###
+
+PUT http://localhost:8080/products/{{nonExistingProductId}}
+Content-Type: application/x-www-form-urlencoded
+
+title=Ghost
+&variants[0].title=Default
+&variants[0].price=10.00
 &_variants[0].available=on
