@@ -6,11 +6,11 @@
 <main>
     <form class="search-form" action="/search" hx-get="/search/results" hx-target="#search-results"
           hx-trigger="input delay:300ms, wa-clear, submit">
-        <wa-input type="search" name="q" label="Search by title" placeholder="e.g. jeans" th:value="${q}"
+        <wa-input class="floating" type="search" name="q" label="Title" th:value="${q}"
                   clearable autofocus>
             <wa-icon slot="start" name="magnifying-glass"></wa-icon>
         </wa-input>
-        <wa-select name="type" label="Type" placeholder="All types" with-clear>
+        <wa-select class="floating" name="type" label="Type" with-clear>
             <wa-option th:value="${noType}" th:selected="${type == noType}">No type</wa-option>
             <wa-option th:each="productType : ${types}" th:value="${productType}" th:text="${productType}"
                        th:selected="${type == productType}"></wa-option>

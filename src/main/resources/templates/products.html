@@ -102,11 +102,11 @@
         <fieldset>
             <legend>Product</legend>
             <div class="product-fields">
-                <wa-input label="Title" name="title" th:value="*{title}" required
+                <wa-input class="floating" label="Title" name="title" th:value="*{title}" required
                           th:hint="${#fields.hasErrors('title')} ? ${#fields.errors('title')[0]}"
                           th:classappend="${#fields.hasErrors('title')} ? 'invalid'"></wa-input>
-                <wa-input label="Vendor" name="vendor" th:value="*{vendor}"></wa-input>
-                <wa-input label="Type" name="productType" th:value="*{productType}"></wa-input>
+                <wa-input class="floating" label="Vendor" name="vendor" th:value="*{vendor}"></wa-input>
+                <wa-input class="floating" label="Type" name="productType" th:value="*{productType}"></wa-input>
             </div>
         </fieldset>
 
@@ -138,11 +138,11 @@
               titleError=${variant != null and #fields.hasErrors('variants[__${index}__].title')} ? ${#fields.errors('variants[__${index}__].title')[0]},
               priceError=${variant != null and #fields.hasErrors('variants[__${index}__].price')} ? ${#fields.errors('variants[__${index}__].price')[0]},
               imageError=${variant != null and #fields.hasErrors('variants[__${index}__].imageSrc')} ? ${#fields.errors('variants[__${index}__].imageSrc')[0]}">
-    <wa-input label="Variant title" th:name="|${prefix}.title|" th:value="${variant?.title}" required
+    <wa-input class="floating" label="Variant title" th:name="|${prefix}.title|" th:value="${variant?.title}" required
               th:hint="${titleError}" th:classappend="${titleError != null} ? 'invalid'"></wa-input>
-    <wa-input label="Price" type="number" min="0" step="0.01" th:name="|${prefix}.price|" th:value="${variant?.price}" required
+    <wa-input class="floating" label="Price" type="number" min="0" step="0.01" th:name="|${prefix}.price|" th:value="${variant?.price}" required
               th:hint="${priceError}" th:classappend="${priceError != null} ? 'invalid'"></wa-input>
-    <wa-input label="Image URL" type="url" th:name="|${prefix}.imageSrc|" th:value="${variant?.imageSrc}"
+    <wa-input class="floating" label="Image URL" type="url" th:name="|${prefix}.imageSrc|" th:value="${variant?.imageSrc}"
               th:hint="${imageError}" th:classappend="${imageError != null} ? 'invalid'"></wa-input>
     <wa-switch th:name="|${prefix}.available|" th:checked="${variant == null or variant.available}">Available</wa-switch>
     <input type="hidden" th:name="|_${prefix}.available|" value="on">
