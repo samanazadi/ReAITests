@@ -69,11 +69,11 @@ main {
     border-radius: var(--wa-border-radius-s);
 }
 
-.product-row wa-icon {
+.toggle-variants wa-icon {
     transition: rotate var(--wa-transition-fast);
 }
 
-.product-row:has(+ .variants-row:not([hidden])) wa-icon {
+.product-row:has(+ .variants-row:not([hidden])) .toggle-variants wa-icon {
     rotate: 90deg;
 }
 

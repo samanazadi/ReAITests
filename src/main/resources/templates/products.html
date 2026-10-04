@@ -23,7 +23,7 @@
     <tbody th:each="product : ${products}" th:id="|product-${product.id}|">
         <tr class="product-row">
             <td>
-                <wa-button size="small" appearance="plain"
+                <wa-button class="toggle-variants" size="small" appearance="plain"
                            th:hx-get="@{/products/{id}/variants(id=${product.id})}"
                            th:hx-target="|#variants-${product.id}|"
                            hx-trigger="click once"
