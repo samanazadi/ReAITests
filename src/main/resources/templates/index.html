@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout :: pageHead('Products')}"></head>
 <body>
-<header th:replace="~{layout :: pageHeader('products')}"></header>
+<header th:replace="~{layout :: pageHeader('products', 'Products')}"></header>
 <main>
     <wa-button variant="brand" hx-get="/products" hx-target="#products">Load products</wa-button>
     <section id="products"></section>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: pageHead('Search products')}"></head>
+<body>
+<header th:replace="~{layout :: pageHeader('search', 'Search products')}"></header>
+<main>
+    <form class="search-form" action="/search" hx-get="/search/results" hx-target="#search-results"
+          hx-trigger="input delay:300ms, wa-clear, submit">
+        <wa-input type="search" name="q" label="Search by title" placeholder="e.g. jeans" th:value="${q}"
+                  clearable autofocus>
+            <wa-icon slot="start" name="magnifying-glass"></wa-icon>
+        </wa-input>
+    </form>
+    <section id="search-results">
+        <table th:replace="~{products :: productsTable}"></table>
+    </section>
+</main>
+</body>
+</html>

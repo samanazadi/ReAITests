@@ -20,9 +20,14 @@ main {
     gap: var(--wa-space-l);
 }
 
-#products {
+#products,
+#search-results {
     width: 100%;
     overflow-x: auto;
+}
+
+.search-form {
+    width: 100%;
 }
 
 .products-table,

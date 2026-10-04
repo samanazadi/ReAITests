@@ -21,12 +21,12 @@
     <script src="/app.js" defer></script>
 </head>
 <body>
-<header th:fragment="pageHeader(active)">
+<header th:fragment="pageHeader(active, heading)">
     <nav>
         <wa-button href="/" th:appearance="${active == 'products'} ? 'filled' : 'plain'">Products</wa-button>
         <wa-button href="/search" th:appearance="${active == 'search'} ? 'filled' : 'plain'">Search</wa-button>
     </nav>
-    <h1>Products</h1>
+    <h1 th:text="${heading}"></h1>
 </header>
 </body>
 </html>

@@ -18,6 +18,9 @@ class ProductService(
 
     fun findAll(): List<Product> = productRepository.findAllActive()
 
+    fun search(query: String): List<Product> =
+        if (query.isBlank()) findAll() else productRepository.searchActiveByTitle(query.trim())
+
     fun findVariants(productId: Long): List<ProductVariant> = productRepository.findVariantsByProductId(productId)
 
     @Transactional

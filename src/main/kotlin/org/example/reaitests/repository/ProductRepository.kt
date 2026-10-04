@@ -42,17 +42,29 @@ class ProductRepository(private val jdbcClient: JdbcClient) {
         }
     }
 
-    fun findAllActive(): List<Product> =
-        jdbcClient.sql(
+    fun findAllActive(): List<Product> = findActive(null)
+
+    fun searchActiveByTitle(title: String): List<Product> = findActive("%${escapeLike(title)}%")
+
+    private fun escapeLike(value: String): String =
+        value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+    private fun findActive(titlePattern: String?): List<Product> {
+        val titleCondition = if (titlePattern == null) "" else "and p.title ilike :titlePattern"
+        var statement = jdbcClient.sql(
             """
             select p.id, p.external_id, p.title, p.vendor, p.product_type,
                    v.id as variant_id, v.title as variant_title, v.price, v.featured_image_src, v.available
             from products p
             left join product_variants v on v.product_id = p.id
-            where p.deleted_at is null
+            where p.deleted_at is null $titleCondition
             order by p.id, v.id
             """.trimIndent()
         )
+        if (titlePattern != null) {
+            statement = statement.param("titlePattern", titlePattern)
+        }
+        return statement
             .query { rs, _ ->
                 val product = Product(
                     id = rs.getLong("id"),
@@ -75,6 +87,7 @@ class ProductRepository(private val jdbcClient: JdbcClient) {
             .list()
             .groupBy({ it.first }, { it.second })
             .map { (product, variants) -> product.copy(variants = variants.filterNotNull()) }
+    }
 
     fun findVariantsByProductId(productId: Long): List<ProductVariant> =
         jdbcClient.sql(
