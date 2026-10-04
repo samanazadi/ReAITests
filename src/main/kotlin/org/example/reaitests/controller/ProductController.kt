@@ -83,8 +83,9 @@ class ProductController(private val productService: ProductService) {
 
     @DeleteMapping("/products/{id}")
     @ResponseBody
-    fun delete(@PathVariable id: Long): String {
+    fun delete(@PathVariable id: Long, response: HttpServletResponse): String {
         productService.delete(id)
+        showToast(response, "Product deleted", "success")
         return ""
     }
 
