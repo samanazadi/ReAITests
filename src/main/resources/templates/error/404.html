@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: pageHead('Page not found')}"></head>
+<body>
+<header th:replace="~{layout :: pageHeader('')}"></header>
+<main>
+    <wa-callout variant="warning">
+        <wa-icon slot="icon" name="triangle-exclamation"></wa-icon>
+        <strong>Page not found</strong><br>
+        <span th:text="|Nothing exists at ${path}.|"></span>
+    </wa-callout>
+    <wa-button variant="brand" href="/">Back to products</wa-button>
+</main>
+</body>
+</html>

@@ -1,29 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Products</title>
-    <script>
-        {
-            const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
-            const applyColorScheme = () => document.documentElement.classList.toggle("wa-dark", darkMode.matches);
-            applyColorScheme();
-            darkMode.addEventListener("change", applyColorScheme);
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@4.0.0/dist/htmx.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://ka-f.webawesome.com/webawesome@3.14.0/styles/themes/default.css">
-    <script type="module" src="https://ka-f.webawesome.com/webawesome@3.14.0/webawesome.loader.js"></script>
-    <link rel="stylesheet" href="https://ka-f.webawesome.com/webawesome@3.14.0/styles/utilities.css">
-    <link rel="stylesheet" href="https://ka-f.webawesome.com/webawesome@3.14.0/styles/native.css">
-    <link rel="stylesheet" href="/app.css">
-    <script src="/app.js" defer></script>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: pageHead('Products')}"></head>
 <body>
-<header>
-    <h1>Products</h1>
-</header>
+<header th:replace="~{layout :: pageHeader('products')}"></header>
 <main>
     <wa-button variant="brand" hx-get="/products" hx-target="#products">Load products</wa-button>
     <section id="products"></section>
