@@ -28,5 +28,12 @@
     </nav>
     <h1 th:text="${heading}"></h1>
 </header>
+
+<wa-dialog th:fragment="deleteDialog" id="delete-dialog" label="Delete product">
+    <p>Are you sure you want to delete <strong class="delete-product-title"></strong>?</p>
+    <wa-button slot="footer" appearance="outlined" data-dialog="close">Cancel</wa-button>
+    <wa-button slot="footer" id="confirm-delete" variant="danger"
+               hx-status:404="swap:delete" hx-status:5xx="swap:none">Delete</wa-button>
+</wa-dialog>
 </body>
 </html>

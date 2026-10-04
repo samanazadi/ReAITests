@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
 class ProductController(private val productService: ProductService) {
@@ -40,6 +42,13 @@ class ProductController(private val productService: ProductService) {
         }
         model.addAttribute("products", productService.findAll())
         return "products :: productsSection"
+    }
+
+    @DeleteMapping("/products/{id}")
+    @ResponseBody
+    fun delete(@PathVariable id: Long): String {
+        productService.delete(id)
+        return ""
     }
 
     @GetMapping("/products/{id}/variants")

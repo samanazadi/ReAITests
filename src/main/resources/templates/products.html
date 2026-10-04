@@ -17,10 +17,10 @@
         <th>Variants</th>
         <th>Availability</th>
         <th class="price">Price</th>
+        <th></th>
     </tr>
     </thead>
-    <tbody>
-    <th:block th:each="product : ${products}">
+    <tbody th:each="product : ${products}" th:id="|product-${product.id}|">
         <tr class="product-row">
             <td>
                 <wa-button size="small" appearance="plain"
@@ -53,15 +53,22 @@
                     </th:block>
                 </th:block>
             </td>
+            <td class="actions">
+                <wa-button class="delete-product" size="small" appearance="plain" variant="danger"
+                           th:data-product-id="${product.id}" th:data-product-title="${product.title}">
+                    <wa-icon name="trash" label="Delete product"></wa-icon>
+                </wa-button>
+            </td>
         </tr>
         <tr class="variants-row" hidden>
-            <td colspan="8" th:id="|variants-${product.id}|">
+            <td colspan="9" th:id="|variants-${product.id}|">
                 <wa-spinner></wa-spinner>
             </td>
         </tr>
-    </th:block>
-    <tr th:if="${products.isEmpty()}">
-        <td colspan="8" class="empty">No products found.</td>
+    </tbody>
+    <tbody th:if="${products.isEmpty()}">
+    <tr>
+        <td colspan="9" class="empty">No products found.</td>
     </tr>
     </tbody>
 </table>

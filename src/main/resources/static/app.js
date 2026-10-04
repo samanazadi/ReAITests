@@ -13,6 +13,28 @@ document.addEventListener("click", (event) => {
         const form = removeButton.closest("form");
         removeButton.closest(".variant-row").remove();
         renumberVariantRows(form);
+        return;
+    }
+
+    const deleteButton = event.target.closest(".delete-product");
+    if (deleteButton) {
+        const dialog = document.querySelector("#delete-dialog");
+        dialog.querySelector(".delete-product-title").textContent = deleteButton.dataset.productTitle;
+        dialog.querySelector("#confirm-delete").dataset.productId = deleteButton.dataset.productId;
+        dialog.open = true;
+        return;
+    }
+
+    const confirmButton = event.target.closest("#confirm-delete");
+    if (confirmButton) {
+        const productId = confirmButton.dataset.productId;
+        htmx.ajax("DELETE", `/products/${productId}`, {
+            source: confirmButton,
+            target: `#product-${productId}`,
+            swap: "outerHTML",
+        }).finally(() => {
+            confirmButton.closest("wa-dialog").open = false;
+        });
     }
 });
 

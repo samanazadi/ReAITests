@@ -44,6 +44,10 @@ main {
     font-weight: var(--wa-font-weight-semibold);
 }
 
+.actions {
+    text-align: end;
+}
+
 .price {
     text-align: end;
     white-space: nowrap;

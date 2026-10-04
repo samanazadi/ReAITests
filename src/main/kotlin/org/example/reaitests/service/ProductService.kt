@@ -32,6 +32,12 @@ class ProductService(
         return productId
     }
 
+    fun delete(id: Long) {
+        if (!productRepository.softDelete(id)) {
+            throw ProductNotFoundException(id)
+        }
+    }
+
     fun importFromFamme(): Int = importProducts(fammeClient.fetchProducts().take(50))
 
     private fun importProducts(products: List<Product>): Int =

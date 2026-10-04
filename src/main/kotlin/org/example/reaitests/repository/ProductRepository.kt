@@ -89,6 +89,11 @@ class ProductRepository(private val jdbcClient: JdbcClient) {
             .map { (product, variants) -> product.copy(variants = variants.filterNotNull()) }
     }
 
+    fun softDelete(id: Long): Boolean =
+        jdbcClient.sql("update products set deleted_at = now() where id = :id and deleted_at is null")
+            .param("id", id)
+            .update() == 1
+
     fun findVariantsByProductId(productId: Long): List<ProductVariant> =
         jdbcClient.sql(
             """
