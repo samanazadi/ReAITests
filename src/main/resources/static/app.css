@@ -2,10 +2,15 @@ body {
     padding: var(--wa-space-xl);
 }
 
+header {
+    text-align: center;
+    margin-block-end: var(--wa-space-l);
+}
+
 main {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--wa-space-l);
 }
 
@@ -58,4 +63,48 @@ main {
 .empty {
     text-align: center;
     color: var(--wa-color-text-quiet);
+}
+
+.products-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wa-space-xl);
+}
+
+.product-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--wa-space-m);
+}
+
+.variant-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wa-space-s);
+}
+
+.variant-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr auto auto;
+    align-items: start;
+    gap: var(--wa-space-m);
+    padding-block: var(--wa-space-s);
+    border-block-end: var(--wa-border-width-s) var(--wa-border-style) var(--wa-color-surface-border);
+}
+
+.variant-row > wa-switch,
+.variant-row > .remove-variant {
+    align-self: center;
+}
+
+wa-input.invalid::part(hint),
+.form-error {
+    color: var(--wa-color-danger-on-quiet);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--wa-space-m);
+    margin-block-start: var(--wa-space-l);
 }
