@@ -37,9 +37,11 @@ class ProductController(private val productService: ProductService) {
     ): String {
         if (bindingResult.hasErrors()) {
             response.status = HttpStatus.UNPROCESSABLE_CONTENT.value()
+            showToast(response, "Please fix the errors below", "danger")
         } else {
             productService.create(productForm.toProduct())
             model.addAttribute("productForm", ProductForm.empty())
+            showToast(response, "Product added", "success")
         }
         model.addAttribute("products", productService.findAll())
         return "products :: productsSection"
