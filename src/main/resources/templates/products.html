@@ -108,30 +108,35 @@
           th:hx-post="${method == 'post'} ? ${action}"
           th:hx-put="${method == 'put'} ? ${action}"
           th:hx-target="${target}">
-        <div class="product-fields">
-            <wa-input label="Title" name="title" th:value="*{title}" required
-                      th:hint="${#fields.hasErrors('title')} ? ${#fields.errors('title')[0]}"
-                      th:classappend="${#fields.hasErrors('title')} ? 'invalid'"></wa-input>
-            <wa-input label="Vendor" name="vendor" th:value="*{vendor}"></wa-input>
-            <wa-input label="Type" name="productType" th:value="*{productType}"></wa-input>
-        </div>
+        <fieldset>
+            <legend>Product</legend>
+            <div class="product-fields">
+                <wa-input label="Title" name="title" th:value="*{title}" required
+                          th:hint="${#fields.hasErrors('title')} ? ${#fields.errors('title')[0]}"
+                          th:classappend="${#fields.hasErrors('title')} ? 'invalid'"></wa-input>
+                <wa-input label="Vendor" name="vendor" th:value="*{vendor}"></wa-input>
+                <wa-input label="Type" name="productType" th:value="*{productType}"></wa-input>
+            </div>
+        </fieldset>
 
-        <h3>Variants</h3>
-        <p class="form-error" th:if="${#fields.hasErrors('variants')}" th:text="${#fields.errors('variants')[0]}"></p>
-        <div class="variant-rows">
-            <th:block th:each="variant, stat : *{variants}">
-                <div th:replace="~{products :: variantRow(${stat.index}, ${variant})}"></div>
-            </th:block>
-        </div>
-        <template id="variant-row-template">
-            <div th:replace="~{products :: variantRow(0, null)}"></div>
-        </template>
-
-        <div class="form-actions">
+        <fieldset>
+            <legend>Variants</legend>
+            <p class="form-error" th:if="${#fields.hasErrors('variants')}" th:text="${#fields.errors('variants')[0]}"></p>
+            <div class="variant-rows">
+                <th:block th:each="variant, stat : *{variants}">
+                    <div th:replace="~{products :: variantRow(${stat.index}, ${variant})}"></div>
+                </th:block>
+            </div>
+            <template id="variant-row-template">
+                <div th:replace="~{products :: variantRow(0, null)}"></div>
+            </template>
             <wa-button class="add-variant" appearance="outlined">
                 <wa-icon slot="start" name="plus"></wa-icon>
                 Add variant
             </wa-button>
+        </fieldset>
+
+        <div class="form-actions">
             <wa-button type="submit" variant="brand" th:text="${submitLabel}"></wa-button>
         </div>
     </form>

@@ -97,6 +97,44 @@ main {
     gap: var(--wa-space-xl);
 }
 
+.product-form-card form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wa-space-l);
+}
+
+.product-form-card wa-input {
+    position: relative;
+}
+
+.product-form-card wa-input::part(form-control-label) {
+    position: absolute;
+    inset-block-start: calc(var(--wa-form-control-height) / 2);
+    inset-inline-start: var(--wa-form-control-padding-inline);
+    translate: 0 -50%;
+    margin: 0;
+    padding-inline: var(--wa-space-3xs);
+    background: var(--wa-color-surface-default);
+    color: var(--wa-color-text-quiet);
+    font-size: var(--wa-font-size-xs);
+    line-height: 1;
+    z-index: 1;
+    transition: inset-block-start var(--wa-transition-fast), font-size var(--wa-transition-fast);
+}
+
+.product-form-card wa-input:state(blank):not(:focus-within)::part(form-control-label) {
+    font-size: var(--wa-font-size-m);
+    pointer-events: none;
+}
+
+.product-form-card wa-input:is(:focus-within, :not(:state(blank)))::part(form-control-label) {
+    inset-block-start: 0;
+}
+
+.product-form-card wa-input:focus-within::part(form-control-label) {
+    color: var(--wa-color-brand-on-quiet);
+}
+
 .product-fields {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
@@ -128,9 +166,12 @@ wa-input.invalid::part(hint),
     color: var(--wa-color-danger-on-quiet);
 }
 
+.add-variant {
+    margin-block-start: var(--wa-space-m);
+}
+
 .form-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: var(--wa-space-m);
-    margin-block-start: var(--wa-space-l);
 }
