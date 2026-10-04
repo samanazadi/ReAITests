@@ -10,15 +10,18 @@ import org.example.reaitests.model.ProductVariant
 import org.hibernate.validator.constraints.URL
 import java.math.BigDecimal
 
-class ProductForm(
+class ProductForm {
     @field:NotBlank(message = "Title is required")
-    var title: String = "",
-    var vendor: String = "",
-    var productType: String = "",
+    var title: String = ""
+
+    var vendor: String = ""
+
+    var productType: String = ""
+
     @field:Valid
     @field:Size(min = 1, message = "Add at least one variant")
-    var variants: MutableList<VariantForm> = mutableListOf(),
-) {
+    var variants: MutableList<VariantForm> = mutableListOf()
+
     fun toProduct() = Product(
         title = title.trim(),
         vendor = vendor.trim().ifBlank { null },
@@ -27,20 +30,23 @@ class ProductForm(
     )
 
     companion object {
-        fun empty() = ProductForm(variants = mutableListOf(VariantForm()))
+        fun empty() = ProductForm().apply { variants = mutableListOf(VariantForm()) }
     }
 }
 
-class VariantForm(
+class VariantForm {
     @field:NotBlank(message = "Variant title is required")
-    var title: String = "",
+    var title: String = ""
+
     @field:NotNull(message = "Price is required")
     @field:DecimalMin(value = "0.00", message = "Price must be 0 or more")
-    var price: BigDecimal? = null,
+    var price: BigDecimal? = null
+
     @field:URL(message = "Image must be a valid URL")
-    var imageSrc: String = "",
-    var available: Boolean = true,
-) {
+    var imageSrc: String = ""
+
+    var available: Boolean = true
+
     fun toVariant() = ProductVariant(
         title = title.trim(),
         price = requireNotNull(price),
