@@ -16,7 +16,6 @@
         <th>Type</th>
         <th>Variants</th>
         <th>Availability</th>
-        <th class="price">Price</th>
         <th></th>
     </tr>
     </thead>
@@ -45,14 +44,6 @@
                           th:text="|${product.availableCount} of ${product.variants.size()} in stock|"></wa-badge>
                 <wa-badge th:unless="${product.availableCount > 0}" variant="danger" appearance="outlined">Sold out</wa-badge>
             </td>
-            <td class="price">
-                <th:block th:if="${product.minPrice != null}">
-                    <span th:text="${#numbers.formatDecimal(product.minPrice, 1, 2, 'POINT')}"></span>
-                    <th:block th:if="${product.minPrice != product.maxPrice}">
-                        – <span th:text="${#numbers.formatDecimal(product.maxPrice, 1, 2, 'POINT')}"></span>
-                    </th:block>
-                </th:block>
-            </td>
             <td class="actions">
                 <wa-button size="small" appearance="plain" th:href="@{/products/{id}/edit(id=${product.id})}">
                     <wa-icon name="pen" label="Edit product"></wa-icon>
@@ -64,14 +55,14 @@
             </td>
         </tr>
         <tr class="variants-row" hidden>
-            <td colspan="9" th:id="|variants-${product.id}|">
+            <td colspan="8" th:id="|variants-${product.id}|">
                 <wa-spinner></wa-spinner>
             </td>
         </tr>
     </tbody>
     <tbody th:if="${products.isEmpty()}">
     <tr>
-        <td colspan="9" class="empty">No products found.</td>
+        <td colspan="8" class="empty">No products found.</td>
     </tr>
     </tbody>
 </table>
