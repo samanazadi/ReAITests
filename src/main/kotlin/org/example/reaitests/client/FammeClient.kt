@@ -29,7 +29,7 @@ class FammeClient(
     private fun FammeProduct.toProduct() = Product(
         externalId = id,
         title = title,
-        vendor = vendor?.ifBlank { null },
+        vendor = vendor?.ifBlank { null }?.lowercase()?.replaceFirstChar { it.titlecase() },
         productType = productType?.ifBlank { null },
         variants = variants.map { variant ->
             ProductVariant(
