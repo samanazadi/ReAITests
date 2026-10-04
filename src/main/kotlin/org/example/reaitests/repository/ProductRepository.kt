@@ -75,4 +75,26 @@ class ProductRepository(private val jdbcClient: JdbcClient) {
             .list()
             .groupBy({ it.first }, { it.second })
             .map { (product, variants) -> product.copy(variants = variants.filterNotNull()) }
+
+    fun findVariantsByProductId(productId: Long): List<ProductVariant> =
+        jdbcClient.sql(
+            """
+            select v.id, v.title, v.price, v.featured_image_src, v.available
+            from product_variants v
+            join products p on p.id = v.product_id
+            where v.product_id = :productId and p.deleted_at is null
+            order by v.id
+            """.trimIndent()
+        )
+            .param("productId", productId)
+            .query { rs, _ ->
+                ProductVariant(
+                    id = rs.getLong("id"),
+                    title = rs.getString("title"),
+                    price = rs.getBigDecimal("price"),
+                    featuredImageSrc = rs.getString("featured_image_src"),
+                    available = rs.getBoolean("available"),
+                )
+            }
+            .list()
 }

@@ -2,6 +2,7 @@ package org.example.reaitests.service
 
 import org.example.reaitests.client.FammeClient
 import org.example.reaitests.model.Product
+import org.example.reaitests.model.ProductVariant
 import org.example.reaitests.repository.ProductRepository
 import org.springframework.dao.DataAccessException
 import org.springframework.stereotype.Service
@@ -16,6 +17,8 @@ class ProductService(
 ) {
 
     fun findAll(): List<Product> = productRepository.findAllActive()
+
+    fun findVariants(productId: Long): List<ProductVariant> = productRepository.findVariantsByProductId(productId)
 
     @Transactional
     fun create(product: Product): Long {

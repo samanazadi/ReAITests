@@ -1,24 +1,86 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<table th:fragment="table">
+<table th:fragment="table" class="products-table">
     <thead>
     <tr>
+        <th></th>
+        <th></th>
         <th>Title</th>
         <th>Vendor</th>
         <th>Type</th>
         <th>Variants</th>
+        <th>Availability</th>
+        <th class="price">Price</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="product : ${products}">
-        <td th:text="${product.title}"></td>
-        <td th:text="${product.vendor}"></td>
-        <td th:text="${product.productType}"></td>
-        <td th:text="${product.variants.size()}"></td>
-    </tr>
+    <th:block th:each="product : ${products}">
+        <tr class="product-row">
+            <td>
+                <wa-button size="small" appearance="plain"
+                           th:hx-get="@{/products/{id}/variants(id=${product.id})}"
+                           th:hx-target="|#variants-${product.id}|"
+                           hx-trigger="click once"
+                           onclick="this.closest('tr').nextElementSibling.toggleAttribute('hidden')">
+                    <wa-icon name="chevron-right" label="Toggle variants"></wa-icon>
+                </wa-button>
+            </td>
+            <td>
+                <img th:if="${product.thumbnailSrc}" class="thumbnail" th:src="${product.thumbnailSrc + '&width=96'}"
+                     th:alt="${product.title}" loading="lazy">
+            </td>
+            <td class="title" th:text="${product.title}"></td>
+            <td th:text="${product.vendor}"></td>
+            <td th:text="${product.productType}"></td>
+            <td><wa-badge variant="neutral" appearance="filled" th:text="${product.variants.size()}"></wa-badge></td>
+            <td>
+                <wa-badge th:if="${product.availableCount > 0}" variant="success" appearance="outlined"
+                          th:text="|${product.availableCount} of ${product.variants.size()} in stock|"></wa-badge>
+                <wa-badge th:unless="${product.availableCount > 0}" variant="danger" appearance="outlined">Sold out</wa-badge>
+            </td>
+            <td class="price">
+                <th:block th:if="${product.minPrice != null}">
+                    <span th:text="${#numbers.formatDecimal(product.minPrice, 1, 2, 'POINT')}"></span>
+                    <th:block th:if="${product.minPrice != product.maxPrice}">
+                        – <span th:text="${#numbers.formatDecimal(product.maxPrice, 1, 2, 'POINT')}"></span>
+                    </th:block>
+                </th:block>
+            </td>
+        </tr>
+        <tr class="variants-row" hidden>
+            <td colspan="8" th:id="|variants-${product.id}|">
+                <wa-spinner></wa-spinner>
+            </td>
+        </tr>
+    </th:block>
     <tr th:if="${products.isEmpty()}">
-        <td colspan="4">No products found.</td>
+        <td colspan="8" class="empty">No products found.</td>
+    </tr>
+    </tbody>
+</table>
+
+<table th:fragment="variants" class="variants-table">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Title</th>
+        <th>Availability</th>
+        <th class="price">Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="variant : ${variants}">
+        <td>
+            <img th:if="${variant.featuredImageSrc}" class="thumbnail" th:src="${variant.featuredImageSrc + '&width=96'}"
+                 th:alt="${variant.title}" loading="lazy">
+        </td>
+        <td th:text="${variant.title}"></td>
+        <td>
+            <wa-badge th:if="${variant.available}" variant="success" appearance="outlined">In stock</wa-badge>
+            <wa-badge th:unless="${variant.available}" variant="danger" appearance="outlined">Sold out</wa-badge>
+        </td>
+        <td class="price" th:text="${#numbers.formatDecimal(variant.price, 1, 2, 'POINT')}"></td>
     </tr>
     </tbody>
 </table>
